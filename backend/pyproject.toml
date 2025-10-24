@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "cognitive-dashboard-backend"
+version = "0.1.0"
+description = ""
+authors = ["Marcel Bosek <himarseo@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "app" }]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["all"], version = "^0.120.0"}
+uvicorn = {extras = ["standard"], version = "^0.38.0"}
+sqlalchemy = "^2.0.44"
+aiosqlite = "^0.21.0"
+pydantic = "^2.12.3"
+pandas = "^2.3.3"
+scikit-learn = "^1.7.2"
+python-multipart = "^0.0.20"
+aiofiles = "^25.1.0"
+python-socketio = {extras = ["client"], version = "^5.14.2"}
+pydantic-settings = "^2.11.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "uvicorn app.main:app --reload --port 8000"
+
+[tool.pytest.ini_options]
+python_files = "test_*.py"
