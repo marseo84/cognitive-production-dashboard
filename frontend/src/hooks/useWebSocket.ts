@@ -6,9 +6,10 @@ export default function useWebSocket(url: string) {
   useEffect(() => {
     const ws = new WebSocket(url);
 
-    ws.onmessage = (event) => {
-      setData(JSON.parse(event.data));
-    };
+    ws.onopen = () => console.log("✅ Connected to WebSocket", url);
+    ws.onmessage = (event) => setData(JSON.parse(event.data));
+    ws.onerror = (err) => console.error("❌ WebSocket error:", err);
+    ws.onclose = () => console.log("🔌 WebSocket disconnected");
 
     return () => ws.close();
   }, [url]);
