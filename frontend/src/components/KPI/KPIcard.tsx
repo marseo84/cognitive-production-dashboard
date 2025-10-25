@@ -5,7 +5,7 @@ interface KPIProps {
   color?: string;
 }
 
-export default function KPICard({ title, value, unit, color }: KPIProps) {
+export default function KPIcard({ title, value, unit, color }: KPIProps) {
   return (
     <div
       className={`p-4 rounded shadow-md flex flex-col justify-center items-center ${
