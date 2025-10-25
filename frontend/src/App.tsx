@@ -1,11 +1,14 @@
 import { useState } from "react";
+import Header from "./components/Header/Header";
+import Dashboard from "./pages/Dashboard";
 
-import "./App.css";
+// import "./App.css";
 
 function App() {
   return (
-    <div className="h-screen w-screen bg-blue-500 flex items-center justify-center">
-      <h1 className="text-white text-4xl font-bold">Tailwind is working!</h1>
+    <div className="h-screen w-screen bg-gray-900">
+      <Header></Header>
+      <Dashboard></Dashboard>
     </div>
   );
 }
