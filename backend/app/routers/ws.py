@@ -1,7 +1,7 @@
 import asyncio
 import random
 import json
-from datetime import datetime
+from datetime import datetime, UTC
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 
@@ -17,12 +17,13 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             # Simulate live data
             msg = {
-                "ts": datetime.utcnow().isoformat() + "Z",
+                "ts": datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
                 "machine_id": 12,
-                "temperature": round(60 + 20 * random.random(), 2),
-                "vibration": round(0.1 + 1.5 * random.random(), 3),
-                "speed": int(500 + 100 * random.random()),
-                "fault_risk": round(random.random(), 3)
+                "oee": round(random.uniform(70, 95), 1),
+                "throughput": int(random.uniform(60, 120)),
+                "fault_rate": round(random.uniform(0, 5), 2),
+                "energy_kwh": round(random.uniform(100, 400), 1),
+                "temperature": round(random.uniform(55, 75), 1)
             }
 
             # Send the data as JSON

@@ -8,15 +8,16 @@ router = APIRouter()
 
 @router.get("/kpi")
 async def get_kpi(machine_id: int = 12):
-    current_ts = datetime.now(UTC).isoformat().replace('+00:00', 'Z')
+    ts = datetime.now(UTC).isoformat().replace('+00:00', 'Z')
 
     return {
         "machine_id": machine_id,
+        "timestamp": ts,
         "oee": round(random.uniform(70, 95), 1),
-        "throughput": int(random.uniform(50, 120)),
+        "throughput": int(random.uniform(60, 120)),
         "fault_rate": round(random.uniform(0, 5), 2),
         "energy_kwh": round(random.uniform(100, 400), 1),
-        "timestamp": current_ts
+        "temperature": round(random.uniform(55, 75), 2)
     }
 
 
@@ -28,7 +29,10 @@ async def get_historical(machine_id: int = 12, hours: int = 24):
         t = now - timedelta(minutes=15 * i)
         data.append({
             "ts": t.isoformat().replace('+00:00', 'Z'),
-            "throughput": int(70 + 20 * random.uniform(0.8, 1.2)),
-            "temperature": round(60 + 10 * random.uniform(-1, 1), 1)
+            "oee": round(random.uniform(70, 95), 1),
+            "throughput": int(random.uniform(60, 120)),
+            "fault_rate": round(random.uniform(0, 5), 2),
+            "energy_kwh": round(random.uniform(100, 400), 1),
+            "temperature": round(random.uniform(55, 75), 2)
         })
     return {"machine_id": machine_id, "data": list(reversed(data))}
