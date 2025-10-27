@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import KPIcard from "../components/KPI/KPIcard";
 import useWebSocket from "../hooks/useWebSocket";
 import { fetchKPI } from "../services/api";
+import HistoricalChart from "../components/Charts/LineChart";
 
 interface KPIData {
   machine_id: number;
@@ -13,7 +14,7 @@ interface KPIData {
   temperature: number;
   vibration?: number;
   speed?: number;
-  fault_risk: number;
+  fault_risk?: number;
 }
 
 export default function Dashboard() {
@@ -67,47 +68,54 @@ export default function Dashboard() {
   }, [liveData]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        Machine Dashboard
-      </h2>
+    <>
+      <div className="p-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Machine Dashboard
+        </h2>
 
-      {!data ? (
-        <p className="text-gray-600">Connecting to live data...</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
-          <KPIcard
-            title="OEE"
-            value={data.oee.toFixed(1)}
-            unit="%"
-            color="bg-indigo-300"
-          />
-          <KPIcard
-            title="Throughput"
-            value={data.throughput}
-            unit="units/h"
-            color="bg-green-300"
-          />
-          <KPIcard
-            title="Fault Rate"
-            value={data.fault_rate.toFixed(2)}
-            unit="%"
-            color="bg-red-300"
-          />
-          <KPIcard
-            title="Energy"
-            value={data.energy_kwh.toFixed(1)}
-            unit="kWh"
-            color="bg-yellow-300"
-          />
-          <KPIcard
-            title="Temperature"
-            value={data.temperature.toFixed(1)}
-            unit="°C"
-            color="bg-orange-300"
-          />
-        </div>
-      )}
-    </div>
+        {!data ? (
+          <p className="text-gray-600">Connecting to live data...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
+            <KPIcard
+              title="OEE"
+              value={data.oee.toFixed(1)}
+              unit="%"
+              color="bg-indigo-300"
+            />
+            <KPIcard
+              title="Throughput"
+              value={data.throughput}
+              unit="units/h"
+              color="bg-green-300"
+            />
+            <KPIcard
+              title="Fault Rate"
+              value={data.fault_rate.toFixed(2)}
+              unit="%"
+              color="bg-red-300"
+            />
+            <KPIcard
+              title="Energy"
+              value={data.energy_kwh.toFixed(1)}
+              unit="kWh"
+              color="bg-yellow-300"
+            />
+            <KPIcard
+              title="Temperature"
+              value={data.temperature.toFixed(1)}
+              unit="°C"
+              color="bg-orange-300"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* historical chart */}
+      <div className="mt-8 text-gray-800">
+        <HistoricalChart machine_id={data?.machine_id || 12} hours={24} />
+      </div>
+    </>
   );
 }
