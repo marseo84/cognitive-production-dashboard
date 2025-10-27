@@ -18,7 +18,7 @@ interface FilterPanelProps {
   onChange?: (filters: Record<string, string>) => void;
 }
 
-export default function FilterPanel({
+export default function FiltersPanel({
   title = "Filters",
   config,
   initialValues = {},
