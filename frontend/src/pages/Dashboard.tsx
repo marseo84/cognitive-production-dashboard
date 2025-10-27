@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import KPIcard from "../components/KPI/KPIcard";
 import useWebSocket from "../hooks/useWebSocket";
 import { fetchKPI } from "../services/api";
-import HistoricalChart from "../components/Charts/LineChart";
+import HistoricalChart from "../components/Charts/ProductionLineChart";
 
 interface KPIData {
   machine_id: number;
