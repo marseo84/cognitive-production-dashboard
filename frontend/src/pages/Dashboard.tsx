@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import KPIcard from "../components/KPI/KPIcard";
+import KPIcard from "../components/KPI/KPICard";
 import useWebSocket from "../hooks/useWebSocket";
 import { fetchKPI } from "../services/api";
 import HistoricalChart from "../components/Charts/ProductionLineChart";
@@ -67,55 +67,41 @@ export default function Dashboard() {
     }
   }, [liveData]);
 
+  // conditional rendering based on data availability
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-500">
+        Connecting to live data...
+      </div>
+    );
+  }
+
   return (
-    <>
-      <div className="p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">
-          Machine Dashboard
-        </h2>
+    <div className="p-6 space-y-8">
+      {/* Header with filters and data/time */}
+      <DashboardHeader />
 
-        {!data ? (
-          <p className="text-gray-600">Connecting to live data...</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
-            <KPIcard
-              title="OEE"
-              value={data.oee.toFixed(1)}
-              unit="%"
-              color="bg-indigo-300"
-            />
-            <KPIcard
-              title="Throughput"
-              value={data.throughput}
-              unit="units/h"
-              color="bg-green-300"
-            />
-            <KPIcard
-              title="Fault Rate"
-              value={data.fault_rate.toFixed(2)}
-              unit="%"
-              color="bg-red-300"
-            />
-            <KPIcard
-              title="Energy"
-              value={data.energy_kwh.toFixed(1)}
-              unit="kWh"
-              color="bg-yellow-300"
-            />
-            <KPIcard
-              title="Temperature"
-              value={data.temperature.toFixed(1)}
-              unit="°C"
-              color="bg-orange-300"
-            />
-          </div>
-        )}
+      {/* KPI Summary Grid */}
+      <KPIGrid data={data} />
+
+      {/* Two/column layout for gauges and alerts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Real-time gauges */}
+        <div className="lg:col-span-2">
+          <GaugePanel data={data} />
+        </div>
+
+        {/* Alerts panel */}
+        <div className="lg:col-span-1">
+          <AlertsPanel />
+        </div>
       </div>
 
-      {/* historical chart */}
-      <div className="mt-8 text-gray-800">
-        <HistoricalChart machine_id={data?.machine_id || 12} hours={24} />
+      {/* Historical / Summary Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ProductionLineChart machine_id={data.machine_id} hours={24} />
+        <FaultBarChart machine_id={data.machine_id} hours={24} />
       </div>
-    </>
+    </div>
   );
 }
